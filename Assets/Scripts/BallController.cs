@@ -1,9 +1,11 @@
+using Cinemachine;
+using MLAPI;
 using SimpleInputNamespace;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallController : MonoBehaviour
+public class BallController : NetworkBehaviour
 {
     private Rigidbody ball;
     private Joystick joystick;
@@ -16,6 +18,13 @@ public class BallController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (IsLocalPlayer)
+        {
+            CinemachineVirtualCamera cinemachineCamera = FindObjectOfType<CinemachineVirtualCamera>();
+            cinemachineCamera.Follow = this.transform;
+            cinemachineCamera.LookAt = this.transform;
+        }
+
         ball = this.gameObject.GetComponent<Rigidbody>();
         ball.maxAngularVelocity = maxAngularVelocity;
         isReachedTheGround = true;
